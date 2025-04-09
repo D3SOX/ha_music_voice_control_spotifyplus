@@ -1,0 +1,16 @@
+input_text:
+  voice_spotify_last_search:
+    name: Voice Spotify Last Search
+    initial: ""
+    max: 255
+    icon: mdi:spotify
+
+input_number:
+  voice_spotify_last_search_index:
+    name: Voice Spotify Last Search Index
+    min: 0
+    max: 9
+    step: 1
+    initial: 0
+    mode: box
+    icon: mdi:playlist-music
