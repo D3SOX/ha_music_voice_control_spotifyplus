@@ -302,9 +302,15 @@
           id: shuffle_toggle_english
       sequence:
       - parallel:
-        - service: spotifyplus.player_toggle_shuffle_mode
+        - service: spotifyplus.player_set_shuffle_mode
           data:
             entity_id: media_player.spotifyplus_nico
+            state: >-
+              {% if is_state_attr('media_player.spotifyplus_nico', 'shuffle', true) %}
+                false
+              {% else %}
+                true
+              {% endif %}
           continue_on_error: true
         - action: chime_tts.say
           data:
@@ -602,4 +608,415 @@
         chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
+  mode: single
+- id: '1739227579468'
+  alias: 'Voice: Spotify Music Control'
+  description: Unified automation for playing music, playlists, radio, podcasts, and
+    more.
+  triggers:
+  - trigger: conversation
+    id: play_radio_german
+    command:
+    - Spiele [das] Radio von {artist}
+    - Starte [das] Radio von {artist}
+    - Lass [uns] [das] Radio von {artist} hören
+    - Ich möchte [das] Radio von {artist} hören
+    - Spiele [bitte] [das] Radio von {artist}
+    - Leg [das] Radio von {artist} auf
+    - Spiel [das] Künstler-Radio von {artist}
+  - trigger: conversation
+    id: play_radio_english
+    command:
+    - Play [the] radio [station] [from] {artist}
+    - Start [the] radio [station] [from] {artist}
+    - Let's listen to [the] radio [station] [from] {artist}
+    - I want to listen to [the] radio [station] [from] {artist}
+    - Play [the] {artist} radio [station]
+  - trigger: conversation
+    id: play_song_german
+    command:
+    - Spiele [den] Song {song}
+    - Starte [den] Song {song}
+    - Leg [den Song] {song} auf
+    - Spiele [das] Lied {song}
+    - Starte [das] Lied {song}
+  - trigger: conversation
+    id: play_song_english
+    command:
+    - Play [the] song {song}
+    - Start [the] song {song}
+    - Play {song}
+    - I want to hear {song}
+  - trigger: conversation
+    id: play_playlist_german
+    command:
+    - Spiele {playlist} Musik
+    - Starte {playlist} Musik
+    - Spiele [die] Playlist {playlist}
+    - Starte [die] Playlist {playlist}
+  - trigger: conversation
+    id: play_playlist_english
+    command:
+    - Play {playlist} music
+    - Start {playlist} music
+    - Play [the] playlist {playlist}
+    - Start [the] playlist {playlist}
+  - trigger: conversation
+    id: play_podcast_german
+    command:
+    - Spiele [den] Podcast {podcast}
+    - Starte [den] Podcast {podcast}
+  - trigger: conversation
+    id: play_podcast_english
+    command:
+    - Play [the] podcast {podcast}
+    - Start [the] podcast {podcast}
+    - I want to listen to [the] podcast {podcast}
+  - trigger: conversation
+    id: play_artist_german
+    command:
+    - Spiele [mir] Musik von {artist}
+  - trigger: conversation
+    id: play_artist_english
+    command:
+    - Play music from {artist}
+    - Play {artist}
+    - I want to hear {artist}
+  - trigger: conversation
+    id: play_something_else
+    command:
+    - '[Spiele] [etwas] anderes'
+    - 'Play something else'
+    - 'Play something different'
+    - 'Next playlist'
+  - trigger: conversation
+    id: play_weekly
+    command:
+    - Spiele Weekly
+    - Starte Weekly
+    - Play Weekly
+    - Start Weekly
+  conditions: []
+  actions:
+  - action: script.play_spotify_on_nico_source
+    metadata: {}
+    data: {}
+    continue_on_error: true
+  - choose:
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: play_podcast_german
+        - condition: trigger
+          id: play_podcast_english
+      sequence:
+      - action: media_player.shuffle_set
+        metadata: {}
+        data:
+          shuffle: false
+          entity_id: media_player.spotifyplus_nico
+        continue_on_error: true
+      - action: spotifyplus.search_shows
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ trigger.slots.podcast }}'
+          limit: 1
+        response_variable: resultpodcast
+      - if:
+          - condition: template
+            value_template: "{{ resultpodcast is defined and resultpodcast.result is defined and resultpodcast.result.total > 0 }}"
+        then:
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:show:{{ resultpodcast["result"]["items"][0]["id"] }}
+              media_content_type: podcast
+          - action: chime_tts.say
+            data:
+              message: "Playing podcast {{ trigger.slots.podcast }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find a podcast called {{ trigger.slots.podcast }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Podcast
+    - conditions:
+      - condition: trigger
+        id: play_weekly
+      sequence:
+      - action: media_player.play_media
+        target:
+          entity_id: media_player.spotifyplus_nico
+        data:
+          media_content_id: spotify:playlist:37i9dQZEVXcUBWVHd0mH47
+          media_content_type: playlist
+      - action: chime_tts.say
+        data:
+          message: "Playing your Weekly playlist"
+          entity_id: media_player.home_assistant_voice_099b20_media_player
+          chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+          announce: true
+        continue_on_error: true
+      alias: Weekly
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: play_radio_german
+        - condition: trigger
+          id: play_radio_english
+      sequence:
+      - action: media_player.shuffle_set
+        metadata: {}
+        data:
+          shuffle: true
+          entity_id: media_player.spotifyplus_nico
+        continue_on_error: true
+      - action: spotifyplus.search_artists
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ trigger.slots.artist }}'
+        response_variable: resultartist
+      - if:
+          - condition: template
+            value_template: "{{ resultartist is defined and resultartist.result is defined and resultartist.result.total > 0 }}"
+        then:
+          - action: spotifyplus.search_playlists
+            data:
+              entity_id: media_player.spotifyplus_nico
+              criteria: '{{ trigger.slots.artist }} Radio'
+              limit: 1
+            response_variable: resultplaylist
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:artist:{{ resultartist["result"]["items"][0]["id"] }}
+              media_content_type: artist
+          - action: chime_tts.say
+            data:
+              message: "Playing radio from {{ trigger.slots.artist }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find an artist called {{ trigger.slots.artist }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Radio
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: play_playlist_german
+        - condition: trigger
+          id: play_playlist_english
+      sequence:
+      - action: media_player.shuffle_set
+        metadata: {}
+        data:
+          shuffle: true
+          entity_id: media_player.spotifyplus_nico
+        continue_on_error: true
+        alias: Zufällige Wiedergabe
+      - choose:
+        - conditions:
+          - condition: template
+            value_template: '{{ ''zufällig'' in trigger.sentence.lower() or ''zufälliger
+              reihenfolge'' in trigger.sentence.lower() }}'
+          sequence:
+          - data:
+              entity_id: media_player.spotifyplus_nico
+              shuffle: true
+            action: media_player.shuffle_set
+        enabled: false
+      - action: input_number.set_value
+        metadata: {}
+        data:
+          value: 0
+        target:
+          entity_id: input_number.voice_spotify_last_search_index
+      - data:
+          entity_id: input_text.voice_spotify_last_search
+          value: '{{ (trigger.slots.playlist if trigger.slots and ''playlist'' in
+            trigger.slots else ''Party'') | regex_replace(''zufällig|in zufälliger
+            reihenfolge'', '''', ignorecase=True) }}'
+        action: input_text.set_value
+      - action: spotifyplus.search_playlists
+        metadata: {}
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ (trigger.slots.playlist if trigger.slots and ''playlist''
+            in trigger.slots else ''Party'') | regex_replace(''zufällig|in zufälliger
+            reihenfolge'', '''', ignorecase=True) }}'
+          limit: 10
+        response_variable: resultplaylist
+      - if:
+          - condition: template
+            value_template: "{{ resultplaylist is defined and resultplaylist.result is defined and resultplaylist.result.total > 0 }}"
+        then:
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:playlist:{{ resultplaylist['result']['items'][states('input_number.voice_spotify_last_search_index') | int]['id'] }}
+              media_content_type: playlist
+          - action: chime_tts.say
+            data:
+              message: "Playing {{ trigger.slots.playlist if trigger.slots and 'playlist' in trigger.slots else 'Party' }} music"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find a playlist with {{ trigger.slots.playlist if trigger.slots and 'playlist' in trigger.slots else 'Party' }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Genre
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: play_song_german
+        - condition: trigger
+          id: play_song_english
+      sequence:
+      - action: spotifyplus.search_tracks
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ trigger.slots.song }}'
+          limit: 1
+        response_variable: resultsong
+      - if:
+          - condition: template
+            value_template: "{{ resultsong is defined and resultsong.result is defined and resultsong.result.total > 0 }}"
+        then:
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:track:{{ resultsong["result"]["items"][0]["id"] }}
+              media_content_type: track
+          - action: chime_tts.say
+            data:
+              message: "Playing {{ trigger.slots.song }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find a song called {{ trigger.slots.song }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Song
+    - conditions:
+      - condition: trigger
+        id: play_something_else
+      sequence:
+      - action: media_player.shuffle_set
+        metadata: {}
+        data:
+          shuffle: true
+          entity_id: media_player.spotifyplus_nico
+        alias: Zufällige Wiedergabe
+      - data:
+          entity_id: input_number.voice_spotify_last_search_index
+          value: '{{ (states(''input_number.voice_spotify_last_search_index'')
+            | int + 1) % 10 }}'
+        action: input_number.set_value
+      - action: spotifyplus.search_playlists
+        metadata: {}
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ states(''input_text.voice_spotify_last_search'') | regex_replace(''zufällig|in
+            zufälliger reihenfolge'', '''', ignorecase=True) }}'
+          limit: 10
+        response_variable: resultplaylist
+      - if:
+          - condition: template
+            value_template: "{{ resultplaylist is defined and resultplaylist.result is defined and resultplaylist.result.total > 0 }}"
+        then:
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:playlist:{{ resultplaylist['result']['items'][states('input_number.voice_spotify_last_search_index') | int]['id'] }}
+              media_content_type: playlist
+          - action: chime_tts.say
+            data:
+              message: "Playing something different"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find a different playlist to play"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Something else
+    - conditions:
+      - condition: or
+        conditions:
+        - condition: trigger
+          id: play_artist_german
+        - condition: trigger
+          id: play_artist_english
+      sequence:
+      - action: spotifyplus.search_artists
+        data:
+          entity_id: media_player.spotifyplus_nico
+          criteria: '{{ trigger.slots.artist }}'
+        response_variable: resultspotify
+      - if:
+          - condition: template
+            value_template: "{{ resultspotify is defined and resultspotify.result is defined and resultspotify.result.total > 0 }}"
+        then:
+          - action: media_player.play_media
+            target:
+              entity_id: media_player.spotifyplus_nico
+            data:
+              media_content_id: spotify:artist:{{ resultspotify["result"]["items"][0]["id"] }}
+              media_content_type: artist
+          - action: chime_tts.say
+            data:
+              message: "Playing music from {{ trigger.slots.artist }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+        else:
+          - action: chime_tts.say
+            data:
+              message: "I couldn't find an artist called {{ trigger.slots.artist }}"
+              entity_id: media_player.home_assistant_voice_099b20_media_player
+              chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              announce: true
+            continue_on_error: true
+      alias: Play only
   mode: single
