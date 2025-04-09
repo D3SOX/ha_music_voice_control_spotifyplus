@@ -1020,3 +1020,58 @@
             continue_on_error: true
       alias: Play only
   mode: single
+
+- id: 'play_song_by_artist'
+  alias: 'Voice: Play Song by Artist'
+  description: 'Handles commands to play a specific song by a specific artist'
+  triggers:
+  - trigger: conversation
+    id: play_song_by_artist_english
+    command:
+    - Play {song} by {artist}
+    - Play the song {song} by {artist}
+    - I want to hear {song} by {artist}
+  - trigger: conversation
+    id: play_song_by_artist_german
+    command:
+    - Spiele {song} von {artist}
+    - Starte {song} von {artist}
+    - Ich möchte {song} von {artist} hören
+    - Leg {song} von {artist} auf
+  conditions: []
+  actions:
+  - action: script.play_spotify_on_nico_source
+    data: {}
+    continue_on_error: true
+  - action: spotifyplus.search_tracks
+    data:
+      entity_id: media_player.spotifyplus_nico
+      criteria: '{{ trigger.slots.song }} {{ trigger.slots.artist }}'
+      limit: 1
+    response_variable: result_track
+  - if:
+      - condition: template
+        value_template: "{{ result_track is defined and result_track.result is defined and result_track.result.total > 0 }}"
+    then:
+      - action: media_player.play_media
+        target:
+          entity_id: media_player.spotifyplus_nico
+        data:
+          media_content_id: spotify:track:{{ result_track["result"]["items"][0]["id"] }}
+          media_content_type: track
+      - action: chime_tts.say
+        data:
+          message: "Playing {{ trigger.slots.song }} by {{ trigger.slots.artist }}"
+          entity_id: media_player.home_assistant_voice_099b20_media_player
+          end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+          announce: true
+        continue_on_error: true
+    else:
+      - action: chime_tts.say
+        data:
+          message: "I couldn't find {{ trigger.slots.song }} by {{ trigger.slots.artist }}"
+          entity_id: media_player.home_assistant_voice_099b20_media_player
+          end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+          announce: true
+        continue_on_error: true
+  mode: single
