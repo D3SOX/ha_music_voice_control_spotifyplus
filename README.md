@@ -89,6 +89,10 @@ With these automations, you can **play music**, **adjust volume**, and **control
 - Adjust entity IDs (e.g., `media_player.spotify_nico`) and Spotify IDs/links as needed.
 - Add the following helpers and scripts in your `configuration.yaml`:
 
+### 🔧 Automations Configuration
+
+Copy from [voice_spotifyplus_automations.yaml](voice_spotifyplus_automations.yaml)
+
 ### 🔧 Helpers Configuration
 
 Copy from [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration.yaml)
@@ -124,12 +128,6 @@ mode: single
 icon: mdi:spotify
 description: ""
 ```
-
-### Import Blueprint
-
-### **🔗 Direct Import via Home Assistant**
-<a href="https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https%3A%2F%2Fgithub.com%2FD3SOX%2Fha_music_voice_control_spotifyplus%2Fblob%2Fmain%2Fvoice_spotify_control.yaml" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/blueprint_import.svg" alt="Open your Home Assistant instance and show the blueprint import dialog with a specific blueprint pre-filled." /></a>
-
 
 📢 Contributing
 Feel free to fork, translate, suggest improvements, or add new automations!
