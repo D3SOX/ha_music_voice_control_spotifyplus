@@ -103,10 +103,13 @@
       sequence:
       - parallel:
         - data:
-            level: -0.10
+            level: -0.2
             entity_id: media_player.spotifyplus_nico
           continue_on_error: true
           action: spotifyplus.volume_set_step
+        - action: media_player.volume_down
+          target:
+            entity_id: media_player.spotifyplus_nico
         - action: chime_tts.say
           data:
             message: Volume lowered
@@ -124,10 +127,13 @@
       sequence:
       - parallel:
         - data:
-            level: 0.10
+            level: 0.2av
             entity_id: media_player.spotifyplus_nico
           continue_on_error: true
           action: spotifyplus.volume_set_step
+        - action: media_player.volume_up
+          target:
+            entity_id: media_player.spotifyplus_nico
         - action: chime_tts.say
           data:
             message: Volume increased
@@ -354,7 +360,7 @@
       data:
         message: Playing music
         entity_id: media_player.home_assistant_voice_099b20_media_player
-        end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+        end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
   mode: single
@@ -411,7 +417,7 @@
       data:
         message: Song added to your favorites
         entity_id: media_player.home_assistant_voice_099b20_media_player
-        end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+        end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
   mode: single
@@ -446,7 +452,7 @@
       data:
         message: Music paused
         entity_id: media_player.home_assistant_voice_099b20_media_player
-        end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+        end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
   mode: single
@@ -482,7 +488,7 @@
       data:
         message: Playing previous track
         entity_id: media_player.home_assistant_voice_099b20_media_player
-        end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+        end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
   mode: single
@@ -538,7 +544,7 @@
           data:
             message: Repeat mode enabled
             entity_id: media_player.home_assistant_voice_099b20_media_player
-            end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+            end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
             announce: true
           continue_on_error: true
     - conditions:
@@ -559,7 +565,7 @@
           data:
             message: Repeat mode disabled
             entity_id: media_player.home_assistant_voice_099b20_media_player
-            end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+            end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
             announce: true
           continue_on_error: true
   mode: single
@@ -605,7 +611,7 @@
       data:
         message: Song removed from your favorites
         entity_id: media_player.home_assistant_voice_099b20_media_player
-        end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+        end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
         announce: true
       continue_on_error: true
   mode: single
@@ -676,12 +682,13 @@
     id: play_artist_german
     command:
     - Spiele [mir] Musik von {artist}
+    - Spiele [mir] [den Künstler] {artist}
   - trigger: conversation
     id: play_artist_english
     command:
-    - Play music from {artist}
-    - Play {artist}
-    - I want to hear {artist}
+    - Play music [by] [from] {artist}
+    - Play [artist] {artist}
+    - I want to hear [artist] {artist}
   - trigger: conversation
     id: play_something_else
     command:
@@ -689,13 +696,6 @@
     - 'Play something else'
     - 'Play something different'
     - 'Next playlist'
-  - trigger: conversation
-    id: play_weekly
-    command:
-    - Spiele Weekly
-    - Starte Weekly
-    - Play Weekly
-    - Start Weekly
   conditions: []
   actions:
   - action: script.play_spotify_on_nico_source
@@ -737,7 +737,7 @@
             data:
               message: "Playing podcast {{ trigger.slots.podcast }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -745,7 +745,7 @@
             data:
               message: "I couldn't find a podcast called {{ trigger.slots.podcast }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Podcast
@@ -763,7 +763,7 @@
         data:
           message: "Playing your Weekly playlist"
           entity_id: media_player.home_assistant_voice_099b20_media_player
-          end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+          end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
           announce: true
         continue_on_error: true
       alias: Weekly
@@ -806,7 +806,7 @@
             data:
               message: "Playing radio from {{ trigger.slots.artist }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -814,7 +814,7 @@
             data:
               message: "I couldn't find an artist called {{ trigger.slots.artist }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Radio
@@ -879,7 +879,7 @@
             data:
               message: "Playing {{ trigger.slots.playlist if trigger.slots and 'playlist' in trigger.slots else 'Party' }} music"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -887,7 +887,7 @@
             data:
               message: "I couldn't find a playlist with {{ trigger.slots.playlist if trigger.slots and 'playlist' in trigger.slots else 'Party' }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Genre
@@ -919,7 +919,7 @@
             data:
               message: "Playing {{ trigger.slots.song }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -927,7 +927,7 @@
             data:
               message: "I couldn't find a song called {{ trigger.slots.song }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Song
@@ -968,7 +968,7 @@
             data:
               message: "Playing something different"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -976,7 +976,7 @@
             data:
               message: "I couldn't find a different playlist to play"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Something else
@@ -1007,7 +1007,7 @@
             data:
               message: "Playing music from {{ trigger.slots.artist }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
         else:
@@ -1015,10 +1015,46 @@
             data:
               message: "I couldn't find an artist called {{ trigger.slots.artist }}"
               entity_id: media_player.home_assistant_voice_099b20_media_player
-              end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+              end_end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
               announce: true
             continue_on_error: true
       alias: Play only
+  mode: single
+
+- id: 'play_weekly_spotify'
+  alias: 'Voice: Play Weekly Spotify Playlist'
+  description: 'Plays your Weekly Spotify playlist when requested'
+  triggers:
+  - trigger: conversation
+    id: play_weekly
+    command:
+    - Spiele Weekly
+    - Starte Weekly
+    - Play Weekly
+    - Start Weekly
+    - Play my Weekly
+    - Play my Weekly playlist
+    - Play my Weekly Discovery
+    - Play my Discover Weekly
+  conditions: []
+  actions:
+  - action: script.play_spotify_on_nico_source
+    metadata: {}
+    data: {}
+    continue_on_error: true
+  - action: media_player.play_media
+    target:
+      entity_id: media_player.spotifyplus_nico
+    data:
+      media_content_id: spotify:playlist:37i9dQZEVXcUBWVHd0mH47
+      media_content_type: playlist
+  - action: chime_tts.say
+    data:
+      message: "Playing your Weekly playlist"
+      entity_id: media_player.home_assistant_voice_099b20_media_player
+      end_chime_path: /config/www/custom_audio/Alexa_Notification.mp3
+      announce: true
+    continue_on_error: true
   mode: single
 
 - id: 'play_song_by_artist'
