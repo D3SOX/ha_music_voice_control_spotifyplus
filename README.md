@@ -4,7 +4,7 @@ This repository contains a collection of **Home Assistant automations** that ena
 With these automations, you can **play music**, **adjust volume**, and **control playback effortlessly**.
 
 > ⚠️ **Note:** Currently, this automation is available **only in English and German**.  
-> I’d be happy if someone contributes a yaml with the **other translation** of the voice commands. 😊
+> I'd be happy if someone contributes a yaml with the **other translation** of the voice commands. 😊
 
 ---
 
@@ -28,12 +28,16 @@ With these automations, you can **play music**, **adjust volume**, and **control
 
 - **Control Playback**  
   Commands:  
-  - *German:* `"Pause Spotify"`, `"Nächstes Lied"`, `"Shuffle an"`, `"Lautstärke auf 50%"`  
-  - *English:* `"Pause Spotify"`, `"Next song"`, `"Shuffle on"`, `"Volume to 50%"`
+  - *German:* `"Pause Spotify"`, `"Nächstes Lied"`, `"Vorheriges Lied"`, `"Shuffle an"`, `"Wiederholung an"`, `"Lautstärke auf 50%"`  
+  - *English:* `"Pause Spotify"`, `"Next song"`, `"Previous song"`, `"Shuffle on"`, `"Repeat on"`, `"Volume to 50%"`
 
-- **Like Songs**  
-  *Example (DE):* `"Ich mag dieses Lied"`  
-  *Example (EN):* `"I like this song"`
+- **Like/Dislike Songs**  
+  *Example (DE):* `"Ich mag dieses Lied"` or `"Ich mag dieses Lied nicht"`  
+  *Example (EN):* `"I like this song"` or `"I don't like this song"`
+
+- **Change Playlists**  
+  *Example (DE):* `"Spiele etwas anderes"`  
+  *Example (EN):* `"Play something else"`
 
 ---
 
@@ -54,8 +58,8 @@ With these automations, you can **play music**, **adjust volume**, and **control
 5. **Voice: Spiele Spotify und Lieblingssongs**  
    ❤️ *Plays your favorite songs.*
 
-6. **Voice: Spiele Spotify Weekly**  
-   🔄 *Plays your weekly Spotify playlist (Spotify Weekly).*
+6. **Voice: Play Weekly Spotify Playlist**  
+   🔄 *Plays your weekly Spotify playlist (Discover Weekly).*
 
 7. **Voice: Lautstärke ändern**  
    🔊 *Adjusts the volume (up, down, or to a specific percentage).*
@@ -63,20 +67,32 @@ With these automations, you can **play music**, **adjust volume**, and **control
 8. **Voice: Nächstes Lied**  
    ⏭️ *Skips to the next song.*
 
-9. **Voice: Zufällige Wiedergabe**  
-   🔀 *Toggles shuffle on or off.*
+9. **Voice: Vorheriges Lied**  
+   ⏮️ *Goes back to the previous song.*
 
-10. **Voice: Spotify abspielen / Play**  
+10. **Voice: Zufällige Wiedergabe**  
+    🔀 *Toggles shuffle on or off.*
+
+11. **Voice: Toggle Repeat Mode**  
+    🔁 *Toggles repeat mode on or off.*
+
+12. **Voice: Spotify abspielen / Play**  
     ▶️ *Starts Spotify playback.*
 
-11. **Voice: Spiele Playlist - v2**  
+13. **Voice: Spiele Playlist - v2**  
     📂 *Plays a specific playlist, optionally in shuffle mode.*
 
-12. **Voice: Like Current Song**  
+14. **Voice: Like Current Song**  
     ⭐ *Marks the currently playing song as a favorite.*
 
-13. **Voice: Pause Spotify**  
+15. **Voice: Dislike Current Song**  
+    👎 *Removes the currently playing song from favorites.*
+
+16. **Voice: Pause Spotify**  
     ⏸️ *Pauses or stops Spotify playback.*
+
+17. **Voice: Play Something Else**  
+    🔄 *Changes to a different playlist in the same genre/category.*
 
 ---
 
