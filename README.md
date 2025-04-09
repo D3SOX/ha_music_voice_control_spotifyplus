@@ -101,7 +101,7 @@ Copy from [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration
 
 Copy from [voice_spotifyplus_scripts.yaml](voice_spotifyplus_scripts.yaml)
 
-📢 Contributing
+## 📢 Contributing
 Feel free to fork, translate, suggest improvements, or add new automations!
 Contributions are always welcome. 😊
 
