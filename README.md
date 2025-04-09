@@ -3,8 +3,8 @@
 This repository contains a collection of **Home Assistant automations** that enable **voice-controlled Spotify playback** via custom conversation triggers.  
 With these automations, you can **play music**, **adjust volume**, and **control playback effortlessly**.
 
-> ⚠️ **Note:** Currently, this automation is available **only in German**.  
-> I’d be happy if someone contributes a yaml with the **English translation** of the voice commands. 😊
+> ⚠️ **Note:** Currently, this automation is available **only in English and German**.  
+> I’d be happy if someone contributes a yaml with the **other translation** of the voice commands. 😊
 
 ---
 
@@ -86,27 +86,12 @@ With these automations, you can **play music**, **adjust volume**, and **control
 
 - **Home Assistant** with **[SpotifyPlus](https://community.home-assistant.io/t/spotifyplus-integration/698651)** ( Big thanks to @thlucas )
 - **Recommended hardware: [Home Assistant Voice Preview Edition (VPE)](https://www.home-assistant.io/voice-pe/)**
-- Adjust entity IDs (e.g., `media_player.spotifyplus_yourID`) and Spotify IDs/links as needed.
+- Adjust entity IDs (e.g., `media_player.spotify_nico`) and Spotify IDs/links as needed.
 - Add the following helpers and scripts in your `configuration.yaml`:
 
 ### 🔧 Helpers Configuration
 
-```yaml
-input_text:
-  voice_spotify_last_search:
-    name: "Last Playlist Search"
-    initial: ""
-```
-
-```yaml
-input_number:
-  voice_spotify_last_search_index:
-    name: "Last Playlist Search Index"
-    min: 0
-    max: 10
-    step: 1
-    mode: box
-```
+Copy from [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration.yaml)
 
 ### 🔧 Scripts Configuration
 
@@ -121,10 +106,10 @@ sequence:
           - condition: state
             entity_id: media_player.spotifyplus_yourID
             attribute: source
-            state: Spotify Connect Your Source
+            state: your-source (nico-pc for me)
     then:
       - data:
-          source: Spotify Connect Your Source
+          source: your-source (nico-pc for me)
         target:
           entity_id: media_player.spotifyplus_yourID
         action: media_player.select_source
