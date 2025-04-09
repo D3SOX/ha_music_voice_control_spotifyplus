@@ -99,35 +99,7 @@ Copy from [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration
 
 ### 🔧 Scripts Configuration
 
-- Script to select correct spotify source, if needed. (script.play_spotify_on_yourID_source)
-
-```yaml
-sequence:
-  - alias: Update Source
-    if:
-      - condition: not
-        conditions:
-          - condition: state
-            entity_id: media_player.spotifyplus_yourID
-            attribute: source
-            state: your-source (nico-pc for me)
-    then:
-      - data:
-          source: your-source (nico-pc for me)
-        target:
-          entity_id: media_player.spotifyplus_yourID
-        action: media_player.select_source
-      - action: spotifyplus.player_set_shuffle_mode
-        metadata: {}
-        data:
-          state: true
-          entity_id: media_player.spotifyplus_yourID
-    enabled: true
-alias: Play Spotify on your Source
-mode: single
-icon: mdi:spotify
-description: ""
-```
+Copy from [voice_spotifyplus_scripts.yaml](voice_spotifyplus_scripts.yaml)
 
 📢 Contributing
 Feel free to fork, translate, suggest improvements, or add new automations!
