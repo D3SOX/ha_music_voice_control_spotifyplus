@@ -100,22 +100,21 @@ With these automations, you can **play music**, **adjust volume**, and **control
 
 ### ✅ Prerequisites
 
+> [!IMPORTANT]  
+> There are multiple integrations called Spotify Plus. Make sure to use the one linked here
+
 - **Home Assistant** with **[SpotifyPlus](https://community.home-assistant.io/t/spotifyplus-integration/698651)** ( Big thanks to @thlucas )
 - **Recommended hardware: [Home Assistant Voice Preview Edition (VPE)](https://www.home-assistant.io/voice-pe/)**
-- Adjust entity IDs (e.g., `media_player.spotify_nico`) and Spotify IDs/links as needed.
-- Add the following helpers and scripts in your `configuration.yaml`:
+- Adjust entity IDs (e.g. `media_player.spotifyplus_nico`, `media_player.home_assistant_voice_099b20_media_player`, `script.play_spotify_on_nico_source`) as needed.
 
-### 🔧 Automations Configuration
+### 🔧 Configuration
 
-Copy from [voice_spotifyplus_automations.yaml](voice_spotifyplus_automations.yaml)
+Add the following in your
 
-### 🔧 Helpers Configuration
+- `configuration.yaml`: [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration.yaml)
+- `automations.yaml`: [voice_spotifyplus_automations.yaml](voice_spotifyplus_automations.yaml)
+- `scripts.yaml`: [voice_spotifyplus_scripts.yaml](voice_spotifyplus_scripts.yaml)
 
-Copy from [voice_spotifyplus_configuration.yaml](voice_spotifyplus_configuration.yaml)
-
-### 🔧 Scripts Configuration
-
-Copy from [voice_spotifyplus_scripts.yaml](voice_spotifyplus_scripts.yaml)
 
 ## 📢 Contributing
 Feel free to fork, translate, suggest improvements, or add new automations!
