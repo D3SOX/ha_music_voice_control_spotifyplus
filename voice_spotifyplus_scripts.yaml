@@ -9,18 +9,17 @@ play_spotify_on_nico_source:
         - condition: not
           conditions:
             - condition: state
-              entity_id: media_player.spotify_nico
+              entity_id: media_player.spotifyplus_nico
               attribute: source
               state: nico-pc
       then:
         - data:
             source: nico-pc
           target:
-            entity_id: media_player.spotify_nico
+            entity_id: media_player.spotifyplus_nico
           action: media_player.select_source
         - action: media_player.shuffle_set
-          metadata: {}
           data:
             shuffle: true
-            entity_id: media_player.spotify_nico
+            entity_id: media_player.spotifyplus_nico
       enabled: true
